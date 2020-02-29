@@ -20,15 +20,19 @@ public class Onmessage implements IOnmessage {
     @Override
     public void onmessage(ILogicNetwork logicNetwork, NetworkFrame frame) {
 //        CJSystem.logging().info(getClass(),frame);
-        for (Map.Entry<String, NetworkNode> entry : routerPeerMap.entrySet()) {
-            if (nodeName.equals(entry.getKey())) {
-                continue;
+        try {
+            for (Map.Entry<String, NetworkNode> entry : routerPeerMap.entrySet()) {
+                if (nodeName.equals(entry.getKey())) {
+                    continue;
+                }
+                try {
+                    entry.getValue().send(frame.copy());
+                } catch (CircuitException e) {
+                    CJSystem.logging().error(getClass(), e);
+                }
             }
-            try {
-                entry.getValue().send(frame);
-            } catch (CircuitException e) {
-                CJSystem.logging().error(getClass(), e);
-            }
+        }finally {
+            frame.dispose();
         }
     }
 }

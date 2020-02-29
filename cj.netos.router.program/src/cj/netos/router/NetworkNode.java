@@ -52,7 +52,6 @@ public class NetworkNode implements IOnopen, IOnclose, IOnreconnection, IOnnotif
     @Override
     public void onreconnected(String protocol, String host, int port, Map<String, String> props) {
         try {
-            peer.authByPassword(info.getPeer(), info.getPerson(), info.getPassword());
             logicNetwork = peer.listen(info.getListenNetwork(), info.getListenPosition() == ListenPosition.frontend ? true : false, info.getListenmode());
             logicNetwork.onmessage(onmessage);
             peer.viewServer();
