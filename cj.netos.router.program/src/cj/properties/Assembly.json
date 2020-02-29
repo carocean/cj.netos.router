@@ -6,7 +6,7 @@
 				class:"cj.studio.orm.mongodb.MongoDBPlugin",
 				parameters:{
 					remotes:"[
-					'47.104.128.137:27017'
+					'172.31.210.92:27017'
 				]"
 				}
 			}
