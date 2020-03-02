@@ -74,7 +74,7 @@ public class DefaultRouterService implements IRouterService {
             Map<String, Object> map = new HashMap<>();
             map.put("routerName", routerName);
             map.put("nodeName", nodeName);
-            map.put("isRunning", isRunning);
+            map.put("isRunning", isRunning+"");
             home.saveDoc("router.nodes.states", new TupleDocument<>(map));
             return;
         }
