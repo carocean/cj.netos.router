@@ -7,6 +7,7 @@ import cj.netos.network.peer.*;
 import cj.netos.router.entities.NetworkNodeInfo;
 import cj.netos.router.openports.ListenPosition;
 import cj.studio.ecm.CJSystem;
+import cj.studio.ecm.EcmException;
 import cj.studio.ecm.net.CircuitException;
 import cj.ultimate.IClosable;
 import cj.ultimate.gson2.com.google.gson.Gson;
@@ -31,7 +32,7 @@ public class NetworkNode implements IOnopen, IOnclose, IOnreconnection, IOnnotif
 
     public void connect(IOnmessage onmessage) {
         this.onmessage = onmessage;
-        peer = Peer.connect(info.getConnURL(), this, this,this, this);
+        peer = Peer.connect(info.getConnURL(), this, this, this, this);
         peer.authByPassword(info.getPeer(), info.getPerson(), info.getPassword());
         logicNetwork = peer.listen(info.getListenNetwork(), info.getListenPosition() == ListenPosition.frontend ? true : false, info.getListenmode());
         logicNetwork.onmessage(onmessage);
@@ -40,6 +41,11 @@ public class NetworkNode implements IOnopen, IOnclose, IOnreconnection, IOnnotif
 
     @Override
     public void close() {
+        try {
+            logicNetwork.leave();
+        } catch (CircuitException e) {
+            throw new EcmException(e);
+        }
         if (peer != null) {
             peer.close();
         }
